@@ -1,7 +1,8 @@
 import Structure
 import random
-red = Graph()
-creation_instructions = []
+network = Graph()
+network_status = None
+network_message = None
 with open ('script.txt') as f :
     lines = f.readlines()
 lines.sort()
@@ -16,23 +17,35 @@ def execute_instruction(line):
         if(line(2) = 'hub'):
             count_hub = int(line(4))
             while(count_hub not 0):
-                red.add_node(line(3) +'_' + count_hub )
+                network.add_node(line(3) +'_' + count_hub )
                 count_hub -=1
                 
         else:
-            red.add_node(line(3)+'_'+ 1)
+            network.add_node(line(3)+'_'+ 1)
     elif(line(1) = 'connect'):
-        red.add_edge(line(2),line(3))
+        network.add_edge(line(2),line(3))
     elif(line(1)= 'disconnect'):
-        red.disconnect(line(2))
+        network.disconnect(line(2))
     else:
-        check_collision() # funcion que verifica si hay o no colision falta implementar
+        check_collision() 
         if(not check_collision()):
-            sed(node,messege)
-        else: # si colisiono anadir a la history_operation de la line(2) que colisiono en el time line(1)
+            send_data(line)
+        else: 
+            linecurrent_menssage = line(4)
+            add_history(line(1),line(0) + line(2) + line(3) + linecurrent_message[1] + 'collision')
+            update_network()
             waiting_time = random.randint(0,10)
             for i in lines:
-                if(i(1) = 'sed' and i(2)=line(2)):
+                if(i(1) = 'send' and i(2)=line(2)):
                     i(0) = i(0) + waiting_time
+                    lines.sort()
+def send_data(line):
+    network_message = int(line(3))
+    update_network()
+def check_collision(): # falta lo del XOR
+    
+    
+    
+    
                 
                 
