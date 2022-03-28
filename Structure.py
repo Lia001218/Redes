@@ -1,4 +1,4 @@
-# import NumPy
+
 class Node:
     def __init__(self, name):
         self.name = name
@@ -38,20 +38,3 @@ class Graph:
 
     def delete_instruction(self, node):
         instruction.remove()
-    def graph(self):
-        for node in self.adj_list:
-            print(node, " --- ", [i for i in self.adj_list[node]])
-graph1  = Graph()
-
-graph1.add_node(0)
-graph1.add_node(1)
-graph1.add_node(2)
-graph1.add_node(3)
-graph1.add_node(4)
-graph1.add_edge(0,1)
-graph1.add_edge(1,2)
-graph1.add_edge(2,3)
-graph1.add_edge(3,0)
-graph1.add_edge(3,4)
-graph1.add_edge(4,0)
-graph1.graph()
