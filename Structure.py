@@ -31,7 +31,7 @@ class Graph:
         for i in adj_list[node]:
             if(i[0:i.index('_')] == node[0:node('_')]) :
                 continue
-            adj_list.remove(i)
+            self.adj_list.remove(i)
             
     def graph(self):
         for node in self.adj_list:

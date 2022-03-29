@@ -1,0 +1,9 @@
+0 create hub ha 4
+0 create host pa1 
+0 create host pa2
+0 connect ha_3 pa1_1
+0 connect ha_1 pa2_1
+1 send pa1_1 10101
+3 send pa2_1 100
+4 send pa2_1 101
+6 disconnect pa2_1

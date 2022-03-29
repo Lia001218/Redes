@@ -11,20 +11,22 @@ def read_script():
     for line in lines:
         instruction = Instruction(line)
         instructions.append(instruction)
-instruction.Sort()
-for line in lines:
-    if(int(line[0]) == time):
-        execute_instruction(line)
-    else:
-        time +=1
+    instruction.Sort()
+    processing()
+def processing():
+    for line in lines:
+        if(int(line[0]) == time):
+            execute_instruction(line)
+        else:
+            time +=1
 def execute_instruction(line):
     if(line[1] = 'create'):
         if(line[2] = 'hub'):
             count_hub = int(line[4])
-            while(count_hub not 0):
+            while(count_hub != 0):
                 network.add_node(line[3] +'_' + count_hub )
                 network.mylist[line[3] +'_' + count_hub].type = 'hub'
-                if(count_hub not int(line[4])):
+                if(count_hub != int(line[4])):
                     network.add_edge(line[3] +'_' + count_hub,line[3] +'_' + count_hub + 1)
                 count_hub -=1 
                 
@@ -41,13 +43,13 @@ def execute_instruction(line):
             send_data(line)
         else: 
             linecurrent_menssage = line[3]
-            add_history(line[1],line[0] + line[2] + line[3] + linecurrent_message[0] + 'collision')
-            update_network()
+            network.add_history(line[1],line[0] + line[2] + line[3] + linecurrent_message[0] + 'collision')
+            network.update_network()
             waiting_time = random.randint(0,10)
             for i in lines:
                 if(i[1] = 'send' and i[2]=line[2]):
                     i[0] = i[0] + waiting_time
-                    lines.sort()
+                    instruction.sort()
 def send_data(line):
    network.add_history(line(1),line(0) +line[2] + line[3] + network_message[0] + 'ok')
    BFS(line[2],network_message[0][1])
@@ -73,9 +75,12 @@ def BFS(node,bit):
             if(not visited(i)):
                 visited[i] = true
                 node.value = bit
-               q.push(i)
+                q.push(i)
                if(i.type = 'hub'):
-                    update_historyhub(i)
+                   update_historyhub(i)
+read_script()
+                    
+
 
 
         
