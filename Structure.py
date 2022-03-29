@@ -2,10 +2,11 @@
 class Node:
     def __init__(self, name):
         self.name = name
+        self.value = None
+        self.type = None
         self.menssage = None
         self.history_operation = None
-        self.instruction = None
-        
+        self.instruction = None       
 class Graph:
     def __init__(self):
         self.adj_list = {}
@@ -16,8 +17,7 @@ class Graph:
             self.mylist.append(node)
             self.adj_list[node] = []
         else:
-            print('esto tal vez lo quite, en caso que lo deje el mensage es : Node ',
-                  'node,already exists')
+            print('node,already exists')
 
     def add_edge(self, node1, node2):
         if node1 in self.mylist and node2 in self.mylist:
@@ -36,6 +36,8 @@ class Graph:
     def graph(self):
         for node in self.adj_list:
             print(node, " --- ", [i for i in self.adj_list[node]])
+
+    
 graph1  = Graph()
 
 graph1.add_node(0)
