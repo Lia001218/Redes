@@ -1,4 +1,4 @@
-
+# import NumPy
 class Node:
     def __init__(self, name):
         self.name = name
@@ -25,16 +25,28 @@ class Graph:
             self.adj_list[node1].append(node2)
         else:
             print('At least one of the nodes does not exist ')
-
-    def save_message(self ,node, message):
-        self.message = message
-
     def add_history(self, node, action):
         self.history.append(action)
+    def disconnected_edge(self,node):
+        for i in adj_list[node]:
+            if(i[0:i.index('_')] == node[0:node('_')]) :
+                continue
+            adj_list.remove(i)
+            
+    def graph(self):
+        for node in self.adj_list:
+            print(node, " --- ", [i for i in self.adj_list[node]])
+graph1  = Graph()
 
-    # Implemetarlo como Heap que el valor con menor tiempo siempre este al principio
-    def add_instruction(self, node, instruction):
-        self.instruction.append(instruction)
-
-    def delete_instruction(self, node):
-        instruction.remove()
+graph1.add_node(0)
+graph1.add_node(1)
+graph1.add_node(2)
+graph1.add_node(3)
+graph1.add_node(4)
+graph1.add_edge(0,1)
+graph1.add_edge(1,2)
+graph1.add_edge(2,3)
+graph1.add_edge(3,0)
+graph1.add_edge(3,4)
+graph1.add_edge(4,0)
+graph1.graph()
