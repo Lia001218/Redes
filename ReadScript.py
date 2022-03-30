@@ -1,83 +1,98 @@
+from lib2to3.pytree import Node
+from pickle import FALSE
 import Instruction
 import Structure
 import random
-
-network = Graph()
-network_message = None
+time = 0 
+source_current = None
+network = Structure.Graph()
+network_message = []
 instructions = []
 def read_script():
     with open ('script.txt') as f :
         lines = f.readlines()
     for line in lines:
-        instruction = Instruction(line)
+        instruction = Instruction.Instruction(line)
         instructions.append(instruction)
-    instruction.Sort()
+    instructions.sort()
     processing()
 def processing():
-    for line in lines:
-        if(int(line[0]) == time):
-            execute_instruction(line)
-        else:
-            time +=1
+    for line in instructions:
+        time = int(line.time)
+        execute_instruction(line)
 def execute_instruction(line):
-    if(line[1] = 'create'):
-        if(line[2] = 'hub'):
-            count_hub = int(line[4])
-            while(count_hub != 0):
-                network.add_node(line[3] +'_' + count_hub )
-                network.mylist[line[3] +'_' + count_hub].type = 'hub'
-                if(count_hub != int(line[4])):
-                    network.add_edge(line[3] +'_' + count_hub,line[3] +'_' + count_hub + 1)
-                count_hub -=1 
-                
+    if(line.action == 'create'):
+        if(line.device == 'hub'):
+            count_hub = int(line.count_hub)
+            while(count_hub - 1 >=0):
+                if(count_hub == int(line.count_hub)):
+                    network.add_node(line.name + '_' + str(count_hub), 'hub')
+                    count_hub -= 1
+                else:
+                    network.add_node(line.name + '_' + str(count_hub), 'hub')
+                    network.add_edge(network.mylist[len(network.mylist) - 1], network.mylist[len(network.mylist) - 2])
+                    count_hub -=1                
         else:
-            network.add_node(line[3]+'_'+ 1)
-            network.mylist[line[3] +'_' + 1].type = 'pc'
-    elif(line[1] = 'connect'):
-        network.add_edge(line[2],line[3])
-    elif(line[1]= 'disconnect'):
-        network.disconnect(line[2])
+            network.add_node(line.name+'_' + '1', 'pc')
+    elif(line.action == 'connect'):
+        source = search_node(line.source)
+        target = search_node(line.target)
+        network.add_edge(source,target)
+    elif(line.action == 'disconnect'):
+        network.disconnect(line.port)
     else:
-        if(not check_collision(line[2])):
-           create_tupla(line[1],line[3])
-            send_data(line)
+        source = search_node(line.source)
+        if(check_collision(source) == None):
+           create_tupla(int(line.time),line.data)
+           source_current = source
         else: 
-            linecurrent_menssage = line[3]
-            network.add_history(line[1],line[0] + line[2] + line[3] + linecurrent_message[0] + 'collision')
-            network.update_network()
+            linecurrent_menssage = line.data
+            network.add_history(source,str(line.time) + str(line.source)
+             + str(line.action) + network.linecurrent_message[0][0] + 'collision')
             waiting_time = random.randint(0,10)
-            for i in lines:
-                if(i[1] = 'send' and i[2]=line[2]):
-                    i[0] = i[0] + waiting_time
-                    instruction.sort()
-def send_data(line):
-   network.add_history(line(1),line(0) +line[2] + line[3] + network_message[0] + 'ok')
-   BFS(line[2],network_message[0][1])
-   network_message.Remove(0)
+            for i in instructions:
+                if(i.action == 'send' and i.source==line.source):
+                    i.time = i.time + waiting_time
+                    instructions.sort()
+        send_data()
+def send_data():
+    network.add_history(source_current,str(time)
+    + ' ' + str(source_current.name)+ ' ' +str(network_message[0][0])+ ' ' + 'ok')
+    if(time == int(network_message[0][1])):
+        BFS(source_current,network_message[0][0])
+        network_message.pop(0)
 def create_tupla(time,message):
-    network_message.append(message[0], time)
-    for i = 1 in message:
-        network_message.append(message[i],time[i-1] + 10)
+    network_message.append((message[0],time))
+    for i in range(1,len(message)):
+        network_message.append((message[i],network_message[i-1][1] + 10))
 def check_collision(node):
-    return node.value not None
+    return node.value 
 def update_historyhub(node):
-    node.add_history(line(1),line(0) + 'receive' + node.value)
-    for i in adj_list[node]:
+    node.add_history(node, str(time) + 'receive' + node.value)
+    for i in network.adj_list[node]:
         if(i[0:i.index('_')] == node[0:node('_')]) :
-            node.add_history(line(1),line(0) + i.name + 'send' + node.value)   
+            node.add_history(node, str(time) + i.name + 'send' + node.value)   
 def BFS(node,bit):
     q = []
-    visited = [false for i = 0 to range(network.mylist)]
+    visited = {}
+    for i in range(len(network.mylist)):
+        visited[network.mylist[i]] = False
     q.insert(0,node)
     while len(q) > 0:
         node_temp = q.pop(0)
-        for i in network.adj_list(node_temp):
-            if(not visited(i)):
-                visited[i] = true
-                node.value = bit
-                q.push(i)
-               if(i.type = 'hub'):
-                   update_historyhub(i)
+        for i in network.adj_list[node_temp]:
+            if(not visited[i]):
+                visited[i] = True
+                i.value = int(bit)
+                if(i.type == 'hub'):
+                    update_historyhub(i)
+                q.append(i)
+                #if(i.type == 'hub'):
+                 #   update_historyhub(i)
+def search_node(name):
+    for i in network.mylist :
+        if(i.name == name):
+            return i 
 read_script()
                     
 
