@@ -1,5 +1,6 @@
-# import NumPy
+
 from platform import node
+from unicodedata import name
 
 class Node:
     def __init__(self,name,type):
@@ -8,7 +9,10 @@ class Node:
         self.type = type
         self.menssage = None
         self.history_operation = []
-        self.instruction = None       
+        self.instruction = None   
+    def write_txt(self):
+        with open (self.name + ".txt", 'w') as f:
+            f.writelines(self.history_operation)   
 class Graph:
     def __init__(self):
         self.adj_list = {}
@@ -30,14 +34,20 @@ class Graph:
             self.adj_list[node1].append(node2)
         else:
             print('At least one of the nodes does not exist ')
-    def add_history(self, node_name, action):
+    def add_history(self, node, action):
         node.history_operation.append(action)
     def disconnected_edge(self,node):
-        for i in self.adj_list[node]:
-            if(i[0:i.index('_')] == node[0:node('_')]) :
-                continue
-            self.adj_list.remove(i)
-            
+        for i in self.mylist:
+            for j in self.adj_list[i]:
+                if(j == node):
+                    self.adj_list[i].remove(j)
+        self.adj_list[node] = []
+    def update_mylist(self, list_hub):
+        new_mylist = []
+        for node in self.mylist:
+            if(node.type == 'pc'):
+                new_mylist.append(node)
+        self.mylist = new_mylist + list_hub
     def graph(self):
         for node in self.adj_list:
             print(node, " --- ", [i for i in self.adj_list[node]])
