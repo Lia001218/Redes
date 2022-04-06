@@ -74,14 +74,14 @@ def send_data():
     if(network_message != [] and time == int(network_message[0][1])):#si hay mensaje y el tiempo de envio del bit del mensaje coincide con ek tiempo actual entonces se envia
         if(len(network_message) == 1):
             network_message.pop(0)
+            for i in network.mylist:
+                i.value = None
         else:
             network.add_history(source_current,str(time)+ ' ' + source_current.name + ' ' +'send ' +' ' +str(network_message[0][0])+ ' ' + 'ok' + '\n')
             source_current.value = network_message[0][0]
             BFS(source_current,network_message[0][0])
             network_message.pop(0)
-        if(network_message == []): # una ves que se transmitio todo el mensaje , los nodos no van a resivir ninguna informacion
-            for i in network.mylist:
-                i.value = None
+           
 def create_tupla(time,message):
     network_message.append((message[0],time))
     for i in range(1,len(message)):
