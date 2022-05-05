@@ -10,6 +10,9 @@ class Instruction:
             if(self.device == 'hub'):
                 self.count_hub = instruction[4]
                 self.type = 'hub'
+            elif(self.device == 'switch'):
+                self.count_port = instruction[4]
+                self.type = 'switch'
             else :
                 self.type = 'pc'
         elif(self.action == 'connect'):
@@ -20,6 +23,15 @@ class Instruction:
             self.action_code = 3
             self.source = instruction[2]
             self.data = instruction[3]
+        elif(self.action == 'mac'):
+            self.action_code = 0
+            self.source = instruction[2]
+            self.address = instruction[3]
+        elif(self.action == 'send_frame'):
+            self.action_code = 3
+            self.source = instruction[2]
+            self.mac_destinatation = instruction[3]
+            self.data = instruction[4]
         else :
             self.action_code = 2
             self.port = instruction[2]

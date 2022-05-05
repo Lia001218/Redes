@@ -1,11 +1,17 @@
-0 create hub ha 4
+0 create switch s1 4
 0 create host pa1 
 0 create host pa2
-0 create hub hu 3
-0 connect ha_3 pa1_1
-0 connect ha_1 pa2_1
-0 connect hu_2 ha_3
-1 send pa1_1 10101
-3 send pa2_1 100
-4 send pa2_1 101
+0 create host pa3
+0 create switch s2 3
+0 connect s1_3 pa1_1
+0 connect s1_1 pa2_1
+0 connect s2_2 s1_4
+1 connect s2_1 pa3_1
+1 send_frame pa1 A4B5 1010
+1 mac pa2_1 A4B5
+1 mac pa1_1 C3D2
+1 mac pa3_1 A4B4
+3 send_frame pa2 FFFF 11111
+4 send_frame pa2 C3D2 1011
+5 send_frame pa3 A4B5 1001
 6 disconnect pa2_1

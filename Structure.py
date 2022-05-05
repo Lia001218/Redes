@@ -7,24 +7,47 @@ class Node:
         self.name = name
         self.value = None
         self.type = type
-        self.menssage = None
         self.history_operation = []
         self.instruction = None   
     def write_txt(self):
         with open (self.name + ".txt", 'w') as f:
-            f.writelines(self.history_operation)   
+            f.writelines(self.history_operation)
+class Host(Node):
+    def __init__(self, name,type):
+        Node.__init__(self,name,type)
+        self.mac = ''
+        self.menssage = []
+        self.receive = False
+class Link_Device(Node):
+    def __init__(self, name,type):
+        Node.__init__(name, type)
+        self.memory = []   
+class Port():
+    def __init__(self,name,name_device_associated,type_device_associated):
+        self.name = name
+        self.name_device_associated = name_device_associated
+        self.type_device_associated = type_device_associated
+        self.frame = ''
+        self.mac = ''
+        self.associated_mac = []
+    def recive(self,bit):
+        self.frame.add(bit)
+        if(len (self.frame) == 15):
+            self.mac_to = self.frame
+    def send(self):
+        return self.frame.pop(0)
 class Graph:
     def __init__(self):
         self.adj_list = {}
         self.mylist = []
+        self.mydevices = []
         self.node = None
-
-    def add_node(self, name,type):
-        node = Node(name,type)
+    
+    def add_node(self, name,name_device_associated,type_device_associated):
+        node = Port(name,name_device_associated,type_device_associated)
         if(node not in self.mylist):            
             self.mylist.append(node)
             self.adj_list[node] = []
-
         else:
             print('node,already exists')
 
@@ -51,19 +74,3 @@ class Graph:
     def graph(self):
         for node in self.adj_list:
             print(node, " --- ", [i for i in self.adj_list[node]])
-
-    
-#graph1  = Graph()
-#
-#graph1.add_node()
-#graph1.add_node(1)
-#graph1.add_node(2)
-#graph1.add_node(3)
-#graph1.add_node(4)
-#graph1.add_edge(0,1)
-#graph1.add_edge(1,2)
-#graph1.add_edge(2,3)
-#graph1.add_edge(3,0)
-#graph1.add_edge(3,4)
-#graph1.add_edge(4,0)
-#graph1.graph()
