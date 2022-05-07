@@ -25,6 +25,12 @@ def processing():
             time+=1
         if(instructions != [] and instructions[0].time == time):
             execute_instruction(instructions[0])
+def update_time_port():
+    for i in network.mylist:
+        if(i.time_recieve == time):
+            i.time_recieve = 0
+        if(i.time_send == time):
+            i.time_send = 0
 def conect_port_of_switch(name):
     for node1 in network.mylist:
         for node2 in network.mylist:
@@ -43,25 +49,57 @@ def execute_instruction(line):
         else:
             network.mydevices.append(Structure.Node(line.name,'host'))
             network.add_node(line.name+'_' + '1',line.name,'host')
+        instructions.pop(0)
     elif(line.action == 'connect'):
         source = search_node(line.source)
         target = search_node(line.target)
         network.add_edge(source,target)
+        instructions.pop(0)
     elif(line.action == 'disconnect'):
         port = search_node(line.port)
         network.disconnected_edge(port)
+        instructions.pop(0)
     elif(line.action == 'mac'):
         source = search_node(line.source)
         source.mac = line.address
+        instructions.pop(0)
     else: 
         port_source = search_node_for_mac(line.source)
         port_recieve = network.adj_list[port_source]
-        mark = {}
-        for i in network.mylist:
-            mark[i] = False
-        frame = create_frame(line.data,port_source,line.mac_destinatation)
-        send_data(port_source,port_recieve[0],frame,mark)
-    instructions.pop(0)
+        port_host_recieve = search_hot_for_mac(line.mac_destinatation)
+        some_port_used = False
+        if(line.mac_destinatation == 'FFFF'):
+            some_port_used = some_port_recieve()
+        if(port_recieve== []):
+            instructions.pop(0)
+        elif(some_port_used == True ):
+            line.time = int(line.time) + 450
+            instructions.sort()
+        elif(port_host_recieve == None ):
+            line.time = int(line.time) + 450
+            instructions.sort()
+        elif(port_source.time_send >= time or port_host_recieve.time_recieve >= time):
+            update_time_port()
+            line.time = int(line.time) + 450
+            instructions.sort()
+        else:  
+            mark = {}
+            for i in network.mylist:
+                mark[i] = False
+            frame = create_frame(line.data,port_source,line.mac_destinatation)
+            port_host_recieve.time_recieve  = port_source.time_send  = len(frame) *10
+            send_data(port_source,port_recieve[0],frame,mark)
+            instructions.pop(0)
+        
+def some_port_recieve():
+    for i in network.mylist:
+        if (i.time_recieve >= time):
+            return True
+    return False
+def search_hot_for_mac(mac):
+    for device in network.mylist:
+        if(device.mac == mac):
+            return device
 def create_frame(data,source,target):
     mac_to_bit = bin(int(target,16))
     mac_to = mac_to_bit[2:]

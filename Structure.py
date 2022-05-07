@@ -30,6 +30,8 @@ class Port():
         self.frame = ''
         self.mac = ''
         self.associated_mac = []
+        self.time_recieve = 0
+        self.time_send = 0
     def recive(self,bit):
         self.frame.add(bit)
         if(len (self.frame) == 15):
